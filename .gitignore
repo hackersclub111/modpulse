@@ -28,3 +28,14 @@ Desktop.ini
 *.swp
 *.swo
 *~
+
+# Video production artifacts and working screenshots
+video/
+screenshots/devpost-*.png
+screenshots/live-*.png
+screenshots/menu-test.png
+screenshots/playtest-*.png
+screenshots/github-repo.png
+
+# Keep infographic PNGs (user-created via NotebookLM, referenced by README)
+# Keep modpulse-demo-video.mp4 (demo video for submission)
