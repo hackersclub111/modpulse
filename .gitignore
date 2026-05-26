@@ -1,0 +1,30 @@
+node_modules/
+dist/
+.env
+*.local.json
+package-lock.json
+
+# Internal docs / Claude Code artifacts
+CLAUDE.md
+SUBMISSION.md
+WINNING_STRATEGY.md
+devvit.yaml
+.claude/
+.openclaude/
+.cloud/
+.opencloud/
+.open/
+*.output
+*.log
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor junk
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

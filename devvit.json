@@ -1,0 +1,6 @@
+{
+  "name": "modpulse",
+  "slug": "modpulse",
+  "version": "1.0.0",
+  "description": "AI-Powered Contextual Moderation Intelligence — Port of ContextMod enhanced with AI risk scoring, cross-subreddit reputation, and visual dashboard"
+}
