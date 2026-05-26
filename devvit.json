@@ -1,6 +1,17 @@
 {
-  "name": "modpulse",
-  "slug": "modpulse",
-  "version": "1.0.0",
-  "description": "AI-Powered Contextual Moderation Intelligence — Port of ContextMod enhanced with AI risk scoring, cross-subreddit reputation, and visual dashboard"
+  "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
+  "name": "modpulse-intel",
+  "blocks": {
+    "entry": "src/main.ts",
+    "triggers": [
+      "onAppInstall",
+      "onAppUpgrade",
+      "onPostCreate",
+      "onCommentCreate",
+      "onModAction"
+    ]
+  },
+  "dev": {
+    "subreddit": "modpulse_intel_dev"
+  }
 }

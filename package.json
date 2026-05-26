@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "modpulse",
-  "version": "1.0.0",
-  "license": "MIT",
+  "name": "modpulse-intel",
+  "version": "0.0.0",
+  "license": "BSD-3-Clause",
   "type": "module",
   "scripts": {
     "test": "npm run test:unit",
