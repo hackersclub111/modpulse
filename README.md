@@ -24,6 +24,12 @@
 
 ---
 
+### 🎬 Demo Video
+
+[![ModPulse Demo](https://img.shields.io/badge/▶_Watch_Demo-YouTube-red?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/1vD3wz6zCYs)
+
+---
+
 ## 🎯 What is ModPulse?
 
 ModPulse is a **Devvit-native Reddit app** that ports [ContextMod](https://github.com/FoxxMD/context-mod)'s user-history analysis to the Reddit platform, enhanced with **AI risk scoring**, **cross-subreddit reputation tracking**, and **context-menu mod actions** — all running natively inside Reddit.
@@ -65,7 +71,7 @@ Calculates risk scores using **real Reddit data** — not guesswork.
 | Removal Rate | 5% | Redis (computed) |
 | Subreddit Diversity | 5% | Redis (multi-sub) |
 
-### 🎯 7 Context Menu Actions
+### 🎯 8 Context Menu Actions
 Right-click any post or comment:
 
 | Action | What It Does |
@@ -77,6 +83,7 @@ Right-click any post or comment:
 | **ModPulse: Issue Strike** | Severity-based (1/2/3) with auto-escalation |
 | **ModPulse: Add Note** | Shared mod team notes |
 | **ModPulse: View Notes** | See all mod notes for user |
+| **ModPulse: View Dashboard** | Subreddit-wide risk stats, tracked users, risk distribution |
 
 ### 🔄 Three-Strike Escalation System
 | Strike | Severity | Action |
@@ -96,7 +103,7 @@ Right-click any post or comment:
 ```
 src/
 ├── main.ts              # Entry point: 16 Devvit registrations
-│                        #   • 7 menu items
+│                        #   • 8 menu items
 │                        #   • 4 triggers (PostCreate, CommentCreate, ModAction, AppInstall)
 │                        #   • 2 scheduler jobs (hourly, daily)
 │                        #   • 2 forms (warn, add note)

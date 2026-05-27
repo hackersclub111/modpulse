@@ -268,16 +268,16 @@ const strikeForm = Devvit.createForm(
     let banDays = 0;
     let pmMessage = '';
 
-    if (totalStrikes >= 9) {
+    if (totalStrikes >= 3) {
       pmMessage = `You have been permanently banned from r/${subreddit.name} after accumulating ${totalStrikes} strikes.\n\nReason: ${values.reason}`;
-    } else if (totalStrikes >= 6) {
+    } else if (totalStrikes === 2) {
       banDays = 30;
-      pmMessage = `You have received a 30-day ban from r/${subreddit.name} (${totalStrikes} total strikes).\n\nReason: ${values.reason}\n\nFurther violations will result in a permanent ban.`;
-    } else if (totalStrikes >= 3) {
+      pmMessage = `You have received a 30-day ban from r/${subreddit.name} (${totalStrikes} total strikes).\n\nReason: ${values.reason}\n\nOne more strike will result in a permanent ban.`;
+    } else if (totalStrikes === 1) {
       banDays = 7;
-      pmMessage = `You have received a 7-day ban from r/${subreddit.name} (${totalStrikes} total strikes).\n\nReason: ${values.reason}`;
+      pmMessage = `You have received a 7-day ban from r/${subreddit.name} (${totalStrikes} total strikes).\n\nReason: ${values.reason}\n\nTwo more strikes will result in a permanent ban.`;
     } else {
-      pmMessage = `You have received strike #${totalStrikes} in r/${subreddit.name}.\n\nReason: ${values.reason}\n\nThree strikes result in a 7-day ban.`;
+      pmMessage = `You have received strike #${totalStrikes} in r/${subreddit.name}.\n\nReason: ${values.reason}\n\nThree strikes result in a permanent ban.`;
     }
 
     await context.reddit.sendPrivateMessage({
@@ -445,6 +445,72 @@ Devvit.addMenuItem({
   location: ['post', 'comment'],
   forUserType: 'moderator',
   onPress: viewNotes,
+});
+
+// ──────────────────────────────────────────────
+// Menu Item 8: View Subreddit Dashboard (UPGRADE)
+// Creates a sticky post with live subreddit stats
+// ──────────────────────────────────────────────
+async function viewDashboard(event: MenuItemOnPressEvent, context: Devvit.Context): Promise<void> {
+  const subreddit = await context.reddit.getCurrentSubreddit();
+  const trackedUsersRaw = await context.redis.hGetAll(KEYS.global.trackedUsers());
+  const trackedUsers = trackedUsersRaw || {};
+  const userIds = Object.keys(trackedUsers);
+
+  let totalWarnings = 0;
+  let totalRemovals = 0;
+  let totalStrikes = 0;
+  let riskDistribution = { low: 0, medium: 0, high: 0, critical: 0 };
+
+  for (const uid of userIds) {
+    totalWarnings += parseInt(String((await context.redis.get(KEYS.user.warnings(uid))) || '0'));
+    totalRemovals += parseInt(String((await context.redis.get(KEYS.user.removals(uid))) || '0'));
+    totalStrikes += parseInt(String((await context.redis.get(KEYS.user.strikes(uid))) || '0'));
+
+    const riskRaw = await context.redis.get(KEYS.user.risk(uid));
+    if (riskRaw) {
+      try {
+        const risk = JSON.parse(riskRaw);
+        if (risk.level in riskDistribution) riskDistribution[risk.level as keyof typeof riskDistribution]++;
+      } catch { /* ignore parse errors */ }
+    }
+  }
+
+  const report = [
+    `## ModPulse Dashboard — r/${subreddit.name}`,
+    '',
+    `**Tracked Users:** ${userIds.length}`,
+    `**Total Warnings:** ${totalWarnings}`,
+    `**Total Removals:** ${totalRemovals}`,
+    `**Total Strikes:** ${totalStrikes}`,
+    '',
+    '### Risk Distribution',
+    `🟢 Low: ${riskDistribution.low} | 🟡 Medium: ${riskDistribution.medium} | 🟠 High: ${riskDistribution.high} | 🔴 Critical: ${riskDistribution.critical}`,
+    '',
+    `*Last updated: ${new Date().toISOString()}*`,
+    '',
+    '---',
+    '*Powered by ModPulse — AI-Powered Contextual Moderation*',
+  ].join('\n');
+
+  // Send as modmail instead of creating a post (more appropriate)
+  const currentUser = await context.reddit.getCurrentUser();
+  if (currentUser) {
+    await context.reddit.sendPrivateMessage({
+      to: currentUser.username,
+      subject: `📊 ModPulse Dashboard — r/${subreddit.name}`,
+      text: report,
+    });
+  }
+  context.ui.showToast(`📊 Dashboard sent to your inbox — ${userIds.length} users tracked`);
+}
+
+Devvit.addMenuItem({
+  label: '📊 ModPulse: View Dashboard',
+  description: 'Subreddit-wide risk stats sent to your inbox',
+  location: ['post', 'comment'],
+  forUserType: 'moderator',
+  onPress: viewDashboard,
 });
 
 export default Devvit;
