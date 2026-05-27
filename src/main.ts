@@ -286,7 +286,7 @@ const strikeForm = Devvit.createForm(
       text: pmMessage,
     });
 
-    if (banDays > 0 || totalStrikes >= 9) {
+    if (banDays > 0 || totalStrikes >= 3) {
       try {
         const currentUser = await context.reddit.getCurrentUser();
         if (currentUser) {
@@ -302,7 +302,7 @@ const strikeForm = Devvit.createForm(
       } catch { /* Ban might fail if app lacks permissions */ }
     }
 
-    const banText = totalStrikes >= 9 ? 'PERMABAN' : banDays > 0 ? `${banDays}-day ban` : 'warning';
+    const banText = totalStrikes >= 3 ? 'PERMABAN' : banDays > 0 ? `${banDays}-day ban` : 'warning';
     context.ui.showToast(`⚡ Strike #${totalStrikes}: u/${author.username} — ${banText}`);
   }
 );
@@ -389,7 +389,7 @@ async function viewNotes(event: MenuItemOnPressEvent, context: Devvit.Context): 
 }
 
 // ──────────────────────────────────────────────
-// Menu Items — 7 context menu actions
+// Menu Items — 8 context menu actions
 // ──────────────────────────────────────────────
 Devvit.addMenuItem({
   label: '🔍 ModPulse: Analyze User',
